@@ -11,10 +11,11 @@ function Todo(){
         const[todos, setTodos] = useState([]) //storing or updating todos
         //to read and output todos 
         const addTodo = ()=>{
-            setTodos([...todos, todo])
-            console.log(todos)
+            setTodos([...todos, {list: todo, id: Date.now()}]);
+            //converted todo into {list:todo,id} for deletion purpose
+            console.log(todos);
             // to clear search bar
-            setTodo('')
+            setTodo('');
             
         }
         const handleSubmit = (e)=>{
@@ -30,6 +31,10 @@ function Todo(){
             inputRef.current.focus()
         })
 
+        const onDelete = (id)=>{
+            setTodos(todos.filter((to)=> to.id !== id))
+        }
+
     return(
         <div className='container'>
             <h2>TODO !</h2>
@@ -40,14 +45,17 @@ function Todo(){
             </form>
             <div className='list'>
                 <ul>
-                    {todos.map((todo)=>(
+                    {todos.map((to)=>(
                             
-                            <li  className='list-icons'>{todo}
-                                    <span>
-                                        <IoMdDoneAll/>
-                                        <FiEdit />
-                                        <MdDelete />
-                                    </span>
+                            <li className='list-items'>
+                                <div className='list-items-names'>{to.list}</div>
+                                <span>
+                                    <IoMdDoneAll className='list-items-icons' id='complete' title='Complete'/>
+                                    <FiEdit  className='list-items-icons' id='edit' title='Edit'/>
+                                    <MdDelete  className='list-items-icons' id='delete' title='Delete'
+                                        onClick={()=>onDelete(to.id)}
+                                    />
+                                </span> 
                             </li>
                         ))
                     }
